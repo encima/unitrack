@@ -5,8 +5,10 @@ import time, datetime
 import Xlib
 import Xlib.display
 from PySide2.QtWidgets import (QApplication, QLabel, QPushButton,
-                               QVBoxLayout, QWidget)
+                               QVBoxLayout, QWidget, QListWidget, QScrollArea)
 from PySide2.QtCore import Slot, Qt
+from PySide2 import QtGui
+import PySide2
 
 import appthread
 
@@ -14,24 +16,44 @@ MACHINE = 'XPS13'
 
 
 class TrackApp(QWidget):
+
+    entries = []
+
     def __init__(self):
 
         self.thread = None
 
         QWidget.__init__(self)
 
-        self.button = QPushButton("Click me!")
-        self.text = QLabel("Hello World")
+        self.main_layout = QVBoxLayout()
+
+        scroll_layout = QWidget()
+
+        scroll = QScrollArea()
+        scroll.setWidget(scroll_layout)
+        scroll_container = QVBoxLayout()
+        scroll_container.addWidget(scroll)
+        # scroll.setWidgetResizable(True)
+
+        tracking_layout = QVBoxLayout()
+
+        tracking_button = QPushButton("Start Tracking")
+        tracking_button.clicked.connect(self.start_track)
+        
+        tracking_text = QLabel("Hello World")
+        tracking_text.setAlignment(Qt.AlignCenter)
+        
+        tracking_layout.addWidget(tracking_text)
+        tracking_layout.addWidget(tracking_button)
+
+        # self.main_layout.addChildLayout(scroll_container)
+        self.main_layout.addWidget(tracking_text)
+        self.main_layout.addWidget(tracking_button)
+        self.setLayout(self.main_layout)
         self.setWindowTitle("UniTrack")
-        # self.input = QInput("")
-        self.text.setAlignment(Qt.AlignCenter)
+        
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.text)
-        self.layout.addWidget(self.button)
-        self.setLayout(self.layout)
-
-        self.button.clicked.connect(self.start_track)
+        
 
     @Slot()
     def get_app(self):
@@ -58,7 +80,7 @@ class TrackApp(QWidget):
             self.thread = None
             self.button.setText('Start Tracking')
         else:
-            self.thread = appthread.AppDetectThread(self.text)
+            self.thread = appthread.AppDetectThread(self.text, self.list)
             self.thread.start()
             self.button.setText('Stop Tracking')
 

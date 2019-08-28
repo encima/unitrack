@@ -4,15 +4,19 @@ import time, datetime, sqlite3
 import Xlib
 import Xlib.display
 from threading import Thread
+import entry
 
 MACHINE = 'XPS13'
 
 class AppDetectThread(Thread):
-    def __init__(self, text_box):
+
+
+    def __init__(self, text_box, entries):
         ''' Constructor. '''
  
         Thread.__init__(self)
         self.text = text_box
+        self.entries = entries
         self.online = True
 
         self.setup_db()
@@ -49,10 +53,12 @@ class AppDetectThread(Thread):
         except Xlib.error.XError:  # simplify dealing with BadWindow
             window_name = None
         print(window_name, self.last_entry)
-        if window_name != self.last_entry and self.last_entry is not None and self.last_entry is not 'Tracker':
+        if window_name != self.last_entry and self.last_entry is not None:
             data_tuple = (datetime.datetime.now(), MACHINE, str(window_name))
             self.db_cursor.execute(self.sqlite_insert_with_param, data_tuple)
             self.db_conn.commit()
+            entry = entry.Entry(window_name, datetime.datetime.now(), None, MACHINE)
+            self.entries.append(entry)
         last_entry = window_name
         event = self.disp.next_event()
         return window_name
@@ -61,7 +67,7 @@ class AppDetectThread(Thread):
         i = 0
         while self.online:
             window_name = self.get_app_constant()
-            self.text.setText("{}".format(window_name))
+            self.text.setText("{} detected change at: {}".format(window_name, datetime.datetime.now()))
             i += 2
             time.sleep(5)
 
