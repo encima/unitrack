@@ -1,10 +1,10 @@
 
 class Entry:
     
-    def __init__(self, appName, startTime, endTime, device):
+    def __init__(self, appName, startTime, duration, device):
         self.appName = appName
         self.startTime = startTime
-        self.endTime = endTime
+        self.duration = duration
         self.device = device
 
     def __str__(self):

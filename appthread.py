@@ -4,7 +4,7 @@ import time, datetime, sqlite3
 import Xlib
 import Xlib.display
 from threading import Thread
-import entry
+from entry import Entry
 
 MACHINE = 'XPS13'
 
@@ -18,6 +18,7 @@ class AppDetectThread(Thread):
         self.text = text_box
         self.entries = entries
         self.online = True
+        self.current = None
 
         self.setup_db()
         self.setup()
@@ -52,22 +53,32 @@ class AppDetectThread(Thread):
             window_name = window.get_full_property(self.NET_WM_NAME, 0).value
         except Xlib.error.XError:  # simplify dealing with BadWindow
             window_name = None
-        print(window_name, self.last_entry)
         if window_name != self.last_entry and self.last_entry is not None:
             data_tuple = (datetime.datetime.now(), MACHINE, str(window_name))
-            self.db_cursor.execute(self.sqlite_insert_with_param, data_tuple)
-            self.db_conn.commit()
-            entry = entry.Entry(window_name, datetime.datetime.now(), None, MACHINE)
-            self.entries.append(entry)
-        last_entry = window_name
-        event = self.disp.next_event()
+            # self.db_cursor.execute(self.sqlite_insert_with_param, data_tuple)
+            # self.db_conn.commit()
+            # self.last_entry = window_name
+            if self.current is None:
+                self.current = Entry(window_name, datetime.datetime.now(), 0, MACHINE)
+            else:
+                self.entries.append(self.current)
+                self.current = Entry(window_name, datetime.datetime.now(), 0, MACHINE)
+        elif window_name == self.last_entry:
+            self.current.endTime = (datetime.datetime.now() - self.current.startTime).total_seconds()
+        else:
+            self.current = Entry(window_name, datetime.datetime.now(), 0, MACHINE)
+
+        self.last_entry = window_name
+        
+        
         return window_name
+        event = self.disp.next_event()
  
     def run(self):
-        i = 0
         while self.online:
             window_name = self.get_app_constant()
-            self.text.setText("{} detected change at: {}".format(window_name, datetime.datetime.now()))
-            i += 2
+            if (len(self.entries) > 1):
+                print(self.entries[-1].appName, self.entries[-1].endTime)
+                self.text.setText("{} for: {}".format(self.entries[-1].appName, self.entries[-1].endTime))
             time.sleep(5)
 

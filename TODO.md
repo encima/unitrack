@@ -1,6 +1,6 @@
 ## TODO
 
-* Design layout for entries
+* Design layout for entries (using qt designer)
     * Allow user to enter work done during switch
 * Detect switches and save entries only on switch
 * Finalise main screen layout
