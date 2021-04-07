@@ -3,7 +3,7 @@ amqp==2.3.2
 aniso8601==3.0.2
 anoise==0.0.29
 anoise-media==0.0.17
-ansible==2.5.1
+ansible==2.10.0
 apache-libcloud==2.2.1
 appdirs==1.4.3
 apsw==3.16.2.post1
