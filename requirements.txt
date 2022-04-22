@@ -192,7 +192,7 @@ pylast==2.1.0
 pylint==1.9.3
 pyOpenSSL==18.0.0
 pyparsing==2.3.0
-PyPDF2==1.24
+PyPDF2==1.27.5
 pyperclip==1.7.0
 pyproj==1.9.6
 pyreadline==2.1
