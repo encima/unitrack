@@ -114,7 +114,7 @@ lockfile==0.12.2
 lxml==4.3.4
 mailcap-fix==1.0.1
 mailpile==0.99.5
-Mako==1.0.7
+Mako==1.2.2
 Markdown==3.0
 MarkupSafe==1.0
 marshmallow==1.2.6
