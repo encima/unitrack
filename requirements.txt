@@ -169,7 +169,7 @@ prettytable==0.7.2
 proboscis==1.2.6.0
 prometheus-client==0.3.1
 prompt-toolkit==1.0.15
-protobuf==3.9.0
+protobuf==3.18.3
 psycopg2==2.7.7
 ptyprocess==0.6.0
 puremagic==1.3
