@@ -122,7 +122,7 @@ mccabe==0.6.1
 mdx-journal==0.1.4
 mdx-linkify==1.0
 MechanicalSoup==0.11.0
-mechanize==0.2.5
+mechanize==0.4.6
 mistune==0.8.3
 mock==3.0.5
 monotonic==1.5
