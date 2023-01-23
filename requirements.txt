@@ -234,7 +234,7 @@ SocksipyChain==2.0.15a0
 soundcloud==0.5.0
 soupsieve==1.9.2
 spambayes==1.1b1
-spotipy==2.4.4
+spotipy==2.22.1
 SQLAlchemy==1.2.12
 stem==1.6.0
 stevedore==1.30.0
